@@ -1,24 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState, useEffect} from 'react';
+import GameList from './components/GameList';
 
 function App() {
+  const [games, setGames] = useState([])
+
+  useEffect(() => {
+    fetch("http://localhost:4000/games")
+    .then(response => response.json())
+    .then(gamesArray => {
+        setGames(gamesArray)
+    })
+  }, []);
+
+  console.log(games)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <div>
+     <header>LOGO HEADER</header>
+     <nav className="nav-bar"> NAV BAR</nav>
+     <main> 
+       <GameList games={games}/>
+     </main>
+   </div>
   );
 }
 
