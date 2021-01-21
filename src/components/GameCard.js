@@ -5,10 +5,10 @@ function GameCard({game}) {
 
     return (
         <div className="card">
-            <img src={image} alt={title} />
+            <img className="poster" src={image} alt={title} />
             <h4>{title}</h4>
             <p>{genre}, {maturity_rating}</p>
-            <p>{description}</p>
+            {/* <p>{description}</p> */}
         </div>
     )
 }

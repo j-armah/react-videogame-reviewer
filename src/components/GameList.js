@@ -7,9 +7,9 @@ function GameList({ games }) {
     const gamesArray = games.map(game => <GameCard key={game.id} game={game}/>);
 
     return (
-        <div>
+        <>
             {gamesArray}
-        </div>
+        </>
     )
 }
 
