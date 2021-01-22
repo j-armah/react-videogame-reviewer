@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background-image: url(https://pressstart.vip/images/uploads/assets/cityskyline.png); */
 }
 
 code {
@@ -12,7 +13,7 @@ code {
     monospace;
 }
 
-body {
+.root {
   margin: 0;
   padding: 0; 
   display: grid;
@@ -119,6 +120,34 @@ nav {
   grid-area: review;
   border: 2px solid peru
 }
+/* --------------------  LOGIN PAGE CSS  -------------------- */
+
+.login {
+  position: absolute;
+  display: block;
+  border: 2px solid peru;
+  /* background-image: url(https://i.pinimg.com/originals/fa/dc/b2/fadcb24075acb650de29f258af69d830.gif); */
+  background: url(https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/9bc27292880429.5e569ff84e4d0.gif);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.login-form {
+  position: relative;
+  display: block;
+  border: 2px solid peru;
+  height: 50%;
+  width: 35%;
+  margin: 0 auto;
+  top: 25%;
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+}
 
 /* -------------------- USER PAGE CSS -------------------- */
 
@@ -143,4 +172,4 @@ nav {
   border: 2px solid peru
 }
 
-/* --------------------  -------------------- */
+/* --------------------   -------------------- */
