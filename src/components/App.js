@@ -1,6 +1,6 @@
 
 import React, {useState, useEffect} from 'react';
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import GameList from './GameList';
 import GamePage from './GamePage'
 import Login from './Login'
@@ -46,6 +46,9 @@ function App() {
           </Route>
           <Route exact path="/users/:id">
             <UserPage />
+          </Route>
+          <Route path="*">
+            <Redirect to="/games" />
           </Route>
       </Switch>
     </div>
