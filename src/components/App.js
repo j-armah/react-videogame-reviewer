@@ -5,6 +5,7 @@ import GameList from './GameList';
 import GamePage from './GamePage'
 import Login from './Login'
 import UserPage from './UserPage'
+import Nav from './Nav'
 
 function App() {
   const [games, setGames] = useState([])
@@ -24,15 +25,16 @@ function App() {
      <Route>
       <header>LOGO HEADER</header>
       {/* Navbar prob need its own component? for search and filter, but only when on /games */}
-      <nav className="nav-bar"> NAV BAR</nav>
+      <Nav />
      </Route>
      <Switch>
-      <main>
+        <Route exact path="/games">
+          <main className="game-library">
+            <GameList games={games}/>
+          </main>
+        </Route>
         <Route exact path='/'>
           <Login />
-        </Route>
-        <Route exact path="/games">
-          <GameList games={games}/>
         </Route>
         <Route exact path="/games/:id">
           <GamePage />
@@ -40,7 +42,6 @@ function App() {
         <Route exact path="/users/:id">
           <UserPage />
         </Route>
-      </main>
      </Switch>
    </div>
   );
