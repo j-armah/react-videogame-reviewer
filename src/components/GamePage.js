@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 
 function GamePage() {
+
     const [game, setGame] = useState(null)
     const [isLoaded, setIsLoaded] = useState(false)
 
@@ -26,12 +27,40 @@ function GamePage() {
             <div className="game-page-info">
                 <div className="video">
                     Video/Poster
+                    
                 </div>
                 <div className="game-info">
                     Description/Info
+                    <h3>{game.title}</h3>
+                    <p>{game.genre}</p>
+                    <p>{game.maturity_rating}</p>
+                    <p>{game.description}</p>
                 </div>
                 <div className="game-review">
                     Reviews/Review Form
+                    <ul>
+                        {game.reviews.map(review => 
+                            <li>
+                                {review.user.username} | {review.rating}
+                                <p>{review.content}</p>
+                            </li>
+                        )}
+                    </ul>
+                    {/* Flip div ? */}
+                    <form>
+                        <label>
+                            Write a review:<br/>
+                            <textarea name="content" />
+                            <br/>
+                            Rating: <select name="rating" id="rating" form="review">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </label>
+                    </form>
                 </div>
             </div>
             {/* 

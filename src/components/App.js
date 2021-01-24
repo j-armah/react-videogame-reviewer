@@ -1,6 +1,6 @@
 
 import React, {useState, useEffect} from 'react';
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import GameList from './GameList';
 import GamePage from './GamePage'
 import Login from './Login'
@@ -9,7 +9,20 @@ import Nav from './Nav'
 
 function App() {
   const [games, setGames] = useState([])
-  const [currentUser, setCurrentUser] = useState(1)
+  // const [currentUser, setCurrentUser] = useState({id: 8, username: "test user 1"})
+  const [currentUser, setCurrentUser] = useState(null)
+  const history = useHistory()
+
+
+  const handleLogin = (user) => {
+    console.log(user.username)
+    setCurrentUser(user)
+  }
+
+  const handleLogout = () => {
+    setCurrentUser(null)
+    history.push("/")
+  }
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/games`)
@@ -19,22 +32,24 @@ function App() {
       })
   }, []);
 
-  console.log(games)
+  console.log(currentUser)
   if (!currentUser) {
     return (
         <Route exact path='/'>
-            <Login />
+            <Login setCurrentUser={handleLogin} />
         </Route>
     )
   } else {
     return (
+
+    
     <div className="root">
         <Route>
             <header>LOGO HEADER</header>
             {/* Navbar prob need its own component? for search and filter, but only when on /games */}
-            <Nav />
+            <Nav currentUser={currentUser} handleLogout={handleLogout}/>
         </Route>
-      <Switch>
+        <Switch>
           <Route exact path="/games">
             <main className="game-library">
               <GameList games={games}/>
