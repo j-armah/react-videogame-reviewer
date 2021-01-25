@@ -40,7 +40,7 @@ function GamePage() {
                     Reviews/Review Form
                     <ul>
                         {game.reviews.map(review => 
-                            <li>
+                            <li key={review.id}>
                                 {review.user.username} | {review.rating}
                                 <p>{review.content}</p>
                             </li>
