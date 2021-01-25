@@ -9,8 +9,9 @@ import Nav from './Nav'
 
 function App() {
   const [games, setGames] = useState([])
-  // const [currentUser, setCurrentUser] = useState({id: 8, username: "test user 1"})
+  //const [currentUser, setCurrentUser] = useState({id: 8, username: "test user 1"})
   const [currentUser, setCurrentUser] = useState(null)
+  const [userGames, setUserGames] = useState([])
   const history = useHistory()
 
 
@@ -24,11 +25,54 @@ function App() {
     history.push("/")
   }
 
+  const handleAddGame = (gameObj) => {
+    console.log(gameObj)
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        game_id : gameObj.id,
+        user_id: currentUser.id,
+        favorite: false
+      })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.id !== null) {
+        setUserGames([...userGames, data])
+      } else {
+          alert("Already added game!")
+      } 
+      
+    })
+  }
+
+  const handleFavorite = (updatedUserGame) => {
+    const updatedUserGames = userGames.map(userGame => {
+      if (userGame.id == updatedUserGame.id) {
+        return {...userGame, favorite: updatedUserGame.favorite}
+      } else {
+        return userGame
+      }
+    })
+    setUserGames(updatedUserGames)
+  }
+
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/games`)
       .then(response => response.json())
       .then(data => {
         setGames(data)
+      })
+  }, []);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games`)
+      .then(response => response.json())
+      .then(data => {
+        setUserGames(data)
       })
   }, []);
 
@@ -41,8 +85,6 @@ function App() {
     )
   } else {
     return (
-
-    
     <div className="root">
         <Route>
             <header>LOGO HEADER</header>
@@ -57,10 +99,10 @@ function App() {
           </Route>
           
           <Route exact path="/games/:id">
-            <GamePage />
+            <GamePage currentUser={currentUser} addGame={handleAddGame}/>
           </Route>
           <Route exact path="/users/:id">
-            <UserPage />
+            <UserPage setUserGames={setUserGames} userGames={userGames} handleFavorite={handleFavorite}/>
           </Route>
           <Route path="*">
             <Redirect to="/games" />
