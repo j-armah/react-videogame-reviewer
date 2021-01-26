@@ -26,7 +26,7 @@ function GamePage({ addGame, currentUser }) {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/games/${params.id}`)
           .then((r) => r.json())
           .then((game) => {
-              console.log(game)
+              //console.log(game)
             setGame(game);
             setIsLoaded(true);
           });
@@ -72,7 +72,7 @@ function GamePage({ addGame, currentUser }) {
         })
         .then(response => response.json())
         .then(data => {
-            const newReviews = reviews.filter(review => review.id != key)
+            const newReviews = reviews.filter(review => review.id !== key)
             setReviews(newReviews)
         })
     }
@@ -135,19 +135,22 @@ function GamePage({ addGame, currentUser }) {
                     <p>{game.genre}</p>
                     <p>{game.maturity_rating}</p>
                     <p>{game.description}</p>
-                    <button onClick={() => addGame(game)}> Add to Game List</button>
+                    {!currentUser ? null : <button onClick={() => addGame(game)}> Add to Game List</button>}
                 </div>
 
                 <div className="game-review">
                     Reviews/Review Form
                     <ul>
                         {reviews.map(review => 
-                            <li key={review.id}>
-                                {review.user.username} | {review.rating}
-                                <p>{review.content}</p>
+                            <div className="review-info" key={review.id}>
+                                <div className="review-head">
+                                    <div className="rating-circle">{review.rating}</div> 
+                                    <div className="review-username">{review.user.username}</div>
+                                </div>
+                                <div className="review-content">{review.content}</div>
                                 <button className="edit-button" onClick={() => addEditForm(review)}>📝</button>
                                 <button className="delete-button" onClick={() => handleDeleteReview(review.id)}>🗑</button>
-                            </li>
+                            </div>
                         )}
                     </ul>
                     {/* Flip div ? */}
@@ -162,6 +165,11 @@ function GamePage({ addGame, currentUser }) {
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                                 <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
                             </select>
                         </label>
                         <button type="submit">Submit Review</button>

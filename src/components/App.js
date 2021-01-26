@@ -12,12 +12,14 @@ function App() {
   //const [currentUser, setCurrentUser] = useState({id: 8, username: "test user 1"})
   const [currentUser, setCurrentUser] = useState(null)
   const [userGames, setUserGames] = useState([])
+  const [search, setSearch] = useState("")
   const history = useHistory()
 
 
   const handleLogin = (user) => {
     console.log(user.username)
     setCurrentUser(user)
+    history.push("/games")
   }
 
   const handleLogout = () => {
@@ -51,7 +53,7 @@ function App() {
 
   const handleFavorite = (updatedUserGame) => {
     const updatedUserGames = userGames.map(userGame => {
-      if (userGame.id == updatedUserGame.id) {
+      if (userGame.id === updatedUserGame.id) {
         return {...userGame, favorite: updatedUserGame.favorite}
       } else {
         return userGame
@@ -76,41 +78,43 @@ function App() {
       })
   }, []);
 
-  console.log(currentUser)
-  if (!currentUser) {
-    return (
-        <Route exact path='/'>
-            <Login setCurrentUser={handleLogin} />
-        </Route>
-    )
-  } else {
+  const filteredGames = games.filter(game => game.title.toLowerCase().includes(search.toLowerCase()))
+
+  //console.log(currentUser)
+  // if (!currentUser) {
+  //   return (
+
+  //   )
+  // } else {
     return (
     <div className="root">
         <Route>
             <header>LOGO HEADER</header>
             {/* Navbar prob need its own component? for search and filter, but only when on /games */}
-            <Nav currentUser={currentUser} handleLogout={handleLogout}/>
+            <Nav setSearch={setSearch} currentUser={currentUser} handleLogout={handleLogout}/>
         </Route>
         <Switch>
           <Route exact path="/games">
             <main className="game-library">
-              <GameList games={games}/>
+              <GameList games={filteredGames}/>
             </main>
           </Route>
-          
           <Route exact path="/games/:id">
             <GamePage currentUser={currentUser} addGame={handleAddGame}/>
           </Route>
           <Route exact path="/users/:id">
             <UserPage setUserGames={setUserGames} userGames={userGames} handleFavorite={handleFavorite}/>
           </Route>
-          <Route path="*">
+          {/* <Route path="*">
             <Redirect to="/games" />
+          </Route> */}
+          <Route exact path='/'>
+            <Login setCurrentUser={handleLogin} />
           </Route>
       </Switch>
     </div>
     );
-  }
+  //}
 }
 
 export default App;

@@ -13,12 +13,12 @@ body {
   /* background-image: url(https://pressstart.vip/images/uploads/assets/cityskyline.png); */
   /* background: url(https://www.xmple.com/wallpaper/blue-gradient-violet-linear-1920x1080-c2-340e41-180e41-a-285-f-14.svg); */
   /* background: url(http://getwallpapers.com/wallpaper/full/7/c/3/1371783-dark-purple-background-1920x1080-for-retina.jpg); */
-  /* background: rgb(23,3,40);
-  background: linear-gradient(0deg, rgba(23,3,40,1) 4%, rgba(17,7,55,1) 66%); */
+  background: rgb(18,14,27);
+  background: linear-gradient(0deg, rgba(14, 14, 27, 0.986) 4%, rgb(18,14,27) 66%);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-
+  color: white;
 }
 
 code {
@@ -27,6 +27,7 @@ code {
 }
 
 .root {
+  color: white;
   margin: 0;
   padding: 0; 
   display: grid;
@@ -48,14 +49,15 @@ code {
 }
 
 header {
-  color: black;
   grid-area: header;
   border: 2px solid red;
-  text-align: center
+  text-align: center;
+  color: white;
 }
 
 
 .game-library {
+  color: white;
   grid-area: main;
   border: 2px solid blue;
   /* background-color: rgba(0,0,0,0.7); */
@@ -63,9 +65,9 @@ header {
   display: grid;
   grid-template-columns: auto auto auto auto;
   grid-template-rows: auto;
-  grid-gap: 20px;
+  grid-gap: 30px;
   padding-top: 10px;
-  padding-bottom: 30px;
+  padding-bottom: 50px;
   overflow: auto;
   max-height: 100%;
   max-width: 100%;
@@ -74,7 +76,7 @@ header {
 }
 
 nav {
-  color: black;
+  color: white;
   grid-area: nav;
   /* background-color: rgba(0,0,0,0.7); */
   /* box-shadow: 0px 10px 43px 22px rgba(0,0,0,0.75); */
@@ -100,12 +102,12 @@ nav {
 
 .poster:hover {
   transform: scale(1.1); 
-  box-shadow: 0px 10px 36px 2px rgba(255,255,255,1);
+  box-shadow: 0px 10px 36px 2px rgb(15, 3, 58);
 }
 
 .poster:active {
   transform: scale(0.8);
-  box-shadow: 0px 10px 36px 2px rgba(242,255,0,1);
+  box-shadow: 0px 10px 36px 2px rgb(22, 6, 59);
 }
 
 .card {
@@ -155,6 +157,30 @@ nav {
   transition: color 300ms;
   cursor: pointer;
 }
+
+.review-info {
+
+}
+.review-head {
+  display: flex;
+}
+.rating-circle {
+  background-color: #1ce63a;
+  width: 20%;
+  border-radius: 200px 200px 200px 200px;
+  font-size: smaller;
+  text-align: center;
+  margin: auto 0;
+}
+.review-username {
+  margin-left: 5%;
+}
+
+.review-content {
+  font-size: 20px;
+  margin-top: 5%;
+}
+
 /* --------------------  LOGIN PAGE CSS  -------------------- */
 
 .login {
@@ -170,7 +196,7 @@ nav {
   width: 100%;
 }
 
-.login-form {
+.login-form-box {
   position: relative;
   display: block;
   border: 2px solid peru;
@@ -207,28 +233,149 @@ nav {
   border: 2px solid peru
 }
 
-/* --------------------   -------------------- */
-
-.modal-div {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  margin: 0 auto;
-  z-index: 1; /* Sit on top */
-  /* left: 0;
-  top: 0; */
-  width: 100%;
-  height: 100%; 
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
+.user-page-info h3 {
+  text-align: center;
 }
 
-.modal-content {
-  background-color: rgba(0,0,0,0.4);
-  margin: 5% 25%; 
-  /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  height: 50%;
-  /* width: 80%; */
+.user-review-head {
+  display: flex;
+}
+.user-rating-circle {
+  background-color: #1ce63a;
+  width: 50px;
+  height: 50px;
+  border-radius: 200px 200px 200px 200px;
+  font-size: smaller;
+  text-align: center;
+  margin: auto 0;
+  line-height: 50px;
+}
+.user-game-title {
+  margin-left: 5%;
+  height: 50px;
+  line-height: 50px;
+}
+
+.user-review-content {
+  font-size: 20px;
+  margin-top: 0px;
+  margin-bottom: 30px;
+  margin-left: 90px;
+}
+/* -------------------- Nav  -------------------- */
+
+.nav-bar {
+  
+}
+.user-nav-div {
+  float: right;
+}
+
+.game-filter-div {
+  display: flex;
+}
+
+/* --------------------   -------------------- */
+
+
+.login-form {
+  /* background-color: #fff8e7;
+  border: 1px solid salmon; */
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin: 0 auto;
+  padding: 0 1rem 1rem;
+  margin-top: 0px;
+}
+
+form input {
+  margin: 0.25rem 0;
+}
+
+form input[type="submit"] {
+  width: 100%;
+}
+
+form img {
+  width: 150px;
+}
+
+.emoji-button {
+  border: none;
+  background: none;
+  padding: 0 0.25rem;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.emoji-button.favorite {
+  color: transparent;
+  text-shadow: 0 0 0 gray;
+}
+
+.emoji-button.favorite.active,
+.emoji-button.favorite:hover {
+  text-shadow: 0 0 0 gold;
+  cursor: pointer;
+}
+
+li {
+  list-style-type: none;
+  padding: 10px;
+}
+
+a:link, a:visited {
+  /* background-color: #4336f4; */
+  color: white;
+  /* padding: 14px 25px; */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  /* font-size: 20px; */
+}
+
+a:hover, a:active {
+  color: rgb(97, 80, 136);
+}
+
+button{
+  background: #3F2E69;
+  background-image: -webkit-linear-gradient(top, #3F2E69, #292035);
+  background-image: -moz-linear-gradient(top, #3F2E69, #292035);
+  background-image: -ms-linear-gradient(top, #3F2E69, #292035);
+  background-image: -o-linear-gradient(top, #3F2E69, #292035);
+  background-image: -webkit-gradient(to bottom, #3F2E69, #292035);
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 10px;
+  color: #FFFFFF;
+  /* font-family: Brush Script MT; */
+  /* font-size: 40px; */
+  font-weight: 100;
+  padding: 5px;
+  /* -webkit-box-shadow: 1px 1px 20px 0 #000000;
+  -moz-box-shadow: 1px 1px 20px 0 #000000; */
+  box-shadow: 1px 1px 20px 0 #000000;
+  text-shadow: 1px 1px 20px #000000;
+  border: solid #0A1757 1px;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+}
+
+button:hover {
+  border: solid #0A1757 1px;
+  background: #473C61;
+  background-image: -webkit-linear-gradient(top, #473C61, #3A2854);
+  background-image: -moz-linear-gradient(top, #473C61, #3A2854);
+  background-image: -ms-linear-gradient(top, #473C61, #3A2854);
+  background-image: -o-linear-gradient(top, #473C61, #3A2854);
+  background-image: -webkit-gradient(to bottom, #473C61, #3A2854);
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  text-decoration: none;
 }

@@ -1,17 +1,38 @@
 import React from 'react'
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 
-function Nav({currentUser, handleLogout}) {
+function Nav({currentUser, handleLogout, setSearch}) {
+
+    //console.log(window.location.pathname)
+    const history = useHistory()
+    
     return (
         <nav className="nav-bar">
-            {!currentUser ? null : <NavLink exact to={`/users/${currentUser.id}`} className="button">
-                {currentUser.username}
-            </NavLink>}
-            <NavLink exact to="/games" className="button">
-                All Games
-            </NavLink>
-
-            <button onClick={handleLogout}>Logout</button>
+            <div className="user-nav-div">
+                {!currentUser ?
+                    <div>
+                        <NavLink exact to={"/"}>
+                            Login
+                        </NavLink>
+                    </div> 
+                    :
+                    <div>
+                        <NavLink exact to={`/users/${currentUser.id}`} className="nav-button">
+                            {currentUser.username}
+                        </NavLink>
+                        <button className="nav-button" onClick={handleLogout}>Logout</button>
+                    </div>}
+            </div>
+            <div className="game-filter-div">
+                <NavLink exact to="/games" className="nav-button">
+                    All Games
+                </NavLink>
+                {false ? null : 
+                <div className="nav-search">
+                    <input type="text" placeholder="search games..." onChange={(e) => setSearch(e.target.value)}/>
+                </div>
+                }
+            </div>
         </nav>
     )
 }
