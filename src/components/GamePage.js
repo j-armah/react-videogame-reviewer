@@ -1,15 +1,33 @@
 import React, {useState, useEffect} from 'react'
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
+// import Modal from 'react-modal'
+// Modal.setAppElement('#root');
 
-function GamePage({ addGame, currentUser }) {
+
+
+function GamePage({ addGame, currentUser}) {
     const [game, setGame] = useState(null)
     const [isLoaded, setIsLoaded] = useState(false)
     const [content, setContent] = useState("")
     const [rating, setRating] = useState(0)
     const [reviews, setReviews] = useState([])
+    // const [modalIsOpen, setIsOpen] = React.useState(false)
+    // var subtitle;
+
 
     const params = useParams()
     //console.log(params.id)
+
+    const customStyles = {
+        content : {
+          top                   : '50%',
+          left                  : '50%',
+          right                 : 'auto',
+          bottom                : 'auto',
+          marginRight           : '-50%',
+          transform             : 'translate(-20%, -50%)',
+        }
+    }
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/`)
@@ -17,7 +35,7 @@ function GamePage({ addGame, currentUser }) {
           .then((reviews) => {
             
             const gameReviews = reviews.filter(review => review.game_id === parseInt(params.id))
-            console.log(gameReviews)
+            //console.log(gameReviews)
             setReviews(gameReviews);
           });
     }, [params.id])
@@ -33,7 +51,15 @@ function GamePage({ addGame, currentUser }) {
     }, [params.id]);
 
     
-
+    // function openModal() {
+    //     setIsOpen(true);
+    // }
+    // function afterOpenModal() {
+    //     subtitle.style.color = 'white';
+    // }
+    // function closeModal() {
+    //     setIsOpen(false);
+    // }
     function handleAddReview(newReview) {
         const newReviews = [...reviews, newReview]
         setReviews(newReviews)
@@ -77,27 +103,38 @@ function GamePage({ addGame, currentUser }) {
         })
     }
 
-    function addEditForm(reviewObj) {
-        return (
-            <div>
-                <form onSubmit={handleEditReview}>
-                        <label>
-                            Edit Review:<br/>
-                            <textarea name="content" value={reviewObj.content} onChange ={event => setContent(event.target.value)}/>
-                            <br/>
-                            Rating: <select name="rating" id="rating" form="review" value={reviewObj.rating} onChange={event => setRating(event.target.value)}>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </label>
-                        <button type="submit">Submit Review</button>
-                    </form>
-            </div>
-        );
+    function handleEditReview(event) {
+        event.preventDefault()
+
+        console.log(event)
     }
+
+    // function addEditForm(reviewObj) {
+    //     return (
+    //         <div>
+    //             <form onSubmit={handleEditReview}>
+    //                     <label>
+    //                         Edit Review:<br/>
+    //                         <textarea name="content" value={reviewObj.content} onChange ={event => setContent(event.target.value)}/>
+    //                         <br/>
+    //                         Rating: <select name="rating" id="rating" form="review" value={reviewObj.rating} onChange={event => setRating(event.target.value)}>
+    //                             <option value="1">1</option>
+    //                             <option value="2">2</option>
+    //                             <option value="3">3</option>
+    //                             <option value="4">4</option>
+    //                             <option value="5">5</option>
+    //                             <option value="6">6</option>
+    //                             <option value="7">7</option>
+    //                             <option value="8">8</option>
+    //                             <option value="9">9</option>
+    //                             <option value="10">10</option>
+    //                         </select>
+    //                     </label>
+    //                     <button type="submit">Submit Review</button>
+    //                 </form>
+    //         </div>
+    //     );
+    // }
 
     function editForm (review) {
         console.log(review)
@@ -122,7 +159,8 @@ function GamePage({ addGame, currentUser }) {
     if (!isLoaded) return <h2>Loading...</h2>;
     
     return (
-        <div>
+        <div className="gamepage-div">
+            <div></div>
             <h1>{game.title}</h1>
             <div className="game-page-info">
                 <div className="video">
@@ -130,50 +168,98 @@ function GamePage({ addGame, currentUser }) {
                     
                 </div>
                 <div className="game-info">
-                    Description/Info
                     <h3>{game.title}</h3>
                     <p>{game.genre}</p>
                     <p>{game.maturity_rating}</p>
                     <p>{game.description}</p>
                     {!currentUser ? null : <button onClick={() => addGame(game)}> Add to Game List</button>}
                 </div>
-
+                
                 <div className="game-review">
-                    Reviews/Review Form
+                    <div className="page-review-head">Reviews</div>
                     <ul>
                         {reviews.map(review => 
                             <div className="review-info" key={review.id}>
                                 <div className="review-head">
                                     <div className="rating-circle">{review.rating}</div> 
-                                    <div className="review-username">{review.user.username}</div>
+                                    <div className="review-username"><NavLink exact to={`/users/${review.user.id}`}>{review.user.username}</NavLink></div>
                                 </div>
                                 <div className="review-content">{review.content}</div>
-                                <button className="edit-button" onClick={() => addEditForm(review)}>📝</button>
-                                <button className="delete-button" onClick={() => handleDeleteReview(review.id)}>🗑</button>
+                                {!currentUser ? 
+                                null 
+                                : currentUser.id === review.user_id
+                                ? 
+                                <div>
+                                    <button className="edit-button" >📝</button>
+                                    
+                                    {/* <Modal
+                                        isOpen={modalIsOpen}
+                                        onAfterOpen={afterOpenModal}
+                                        onRequestClose={closeModal}
+                                        style={customStyles}
+                                        contentLabel="Example Modal"
+                                        className="Modal"
+                                        overlayClassName="Overlay"
+                                        setContent={setContent}
+                                    >
+                                    
+                                        <h2 ref={_subtitle => (subtitle = _subtitle)}>Edit Review</h2>
+                                        <form onSubmit={handleEditReview}>
+                                            <label>
+                                            Edit Review:<br/>
+                                            <textarea name="content" value={review.content} onChange ={event => setContent(event.target.value)}/>
+                                            <br/>
+                                            Rating: <select name="rating" id="rating" form="review" value={review.rating} onChange={event => setRating(event.target.value)}>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                    </select>
+                                                    <input type="submit" value="Edit Review"/>
+                                            </label>
+                                            
+                                        </form>
+                                    
+                                    </Modal> */}
+                                    <button className="delete-button" onClick={() => handleDeleteReview(review.id)}>🗑</button>
+                                </div>
+                                : null}
                             </div>
                         )}
                     </ul>
                     {/* Flip div ? */}
-                    <form onSubmit={handleSubmit}>
-                        <label>
-                            Write a review:<br/>
-                            <textarea name="content" value={content} onChange ={event => setContent(event.target.value)}/>
-                            <br/>
-                            Rating: <select name="rating" id="rating" form="review" value={rating} onChange={event => setRating(event.target.value)}>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </label>
-                        <button type="submit">Submit Review</button>
-                    </form>
+                    {!currentUser ? 
+                        null 
+                        : !reviews.map(review => review.user_id).includes(currentUser.id)
+                        ? 
+                        <div>
+                            <form onSubmit={handleSubmit}>
+                                <label>
+                                    Write a review:<br/>
+                                    <textarea name="content" value={content} onChange ={event => setContent(event.target.value)}/>
+                                    <br/>
+                                    Rating: <select name="rating" id="rating" form="review" value={rating} onChange={event => setRating(event.target.value)}>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </label>
+                                <button type="submit">Submit Review</button>
+                            </form>
+                        </div> : null}
                 </div>
             </div>
             {/* 

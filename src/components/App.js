@@ -6,6 +6,7 @@ import GamePage from './GamePage'
 import Login from './Login'
 import UserPage from './UserPage'
 import Nav from './Nav'
+import SignUp from './SignUp'
 
 function App() {
   const [games, setGames] = useState([])
@@ -13,11 +14,27 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null)
   const [userGames, setUserGames] = useState([])
   const [search, setSearch] = useState("")
+  const [filter, setFilter] = useState("all")
   const history = useHistory()
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     fetch(`${process.env.REACT_APP_API_BASE_URL}/profile`, {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //       .then((r) => r.json())
+  //       .then((user) => {
+  //         setCurrentUser(user);
+  //       });
+  //   }
+  // }, []);
 
   const handleLogin = (user) => {
-    console.log(user.username)
+    console.log(user)
     setCurrentUser(user)
     history.push("/games")
   }
@@ -78,9 +95,20 @@ function App() {
       })
   }, []);
 
-  const filteredGames = games.filter(game => game.title.toLowerCase().includes(search.toLowerCase()))
+  const randomGame = () => {
+    let game = games[Math.floor(Math.random() * games.length)]
+    history.push(`/games/${game.id}`)
+  }
 
-  //console.log(currentUser)
+  
+  let filteredGames = games.filter(game => game.title.toLowerCase().includes(search.toLowerCase()))
+
+  if (filter !== "all") {
+    filteredGames = filteredGames.filter(game => game.genre === filter)
+  }
+  
+
+  console.log(currentUser)
   // if (!currentUser) {
   //   return (
 
@@ -91,7 +119,7 @@ function App() {
         <Route>
             <header>LOGO HEADER</header>
             {/* Navbar prob need its own component? for search and filter, but only when on /games */}
-            <Nav setSearch={setSearch} currentUser={currentUser} handleLogout={handleLogout}/>
+            <Nav randomGame={randomGame} filter={filter} setFilter={setFilter} setSearch={setSearch} currentUser={currentUser} handleLogout={handleLogout}/>
         </Route>
         <Switch>
           <Route exact path="/games">
@@ -103,13 +131,16 @@ function App() {
             <GamePage currentUser={currentUser} addGame={handleAddGame}/>
           </Route>
           <Route exact path="/users/:id">
-            <UserPage setUserGames={setUserGames} userGames={userGames} handleFavorite={handleFavorite}/>
+            <UserPage currentUser={currentUser} setUserGames={setUserGames} userGames={userGames} handleFavorite={handleFavorite}/>
           </Route>
           {/* <Route path="*">
             <Redirect to="/games" />
           </Route> */}
           <Route exact path='/'>
-            <Login setCurrentUser={handleLogin} />
+            <Login handleLogin={handleLogin} />
+          </Route>
+          <Route exact path='/signup'>
+            <SignUp handleLogin={handleLogin} />
           </Route>
       </Switch>
     </div>

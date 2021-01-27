@@ -1,11 +1,10 @@
 import React from 'react'
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
-function Nav({currentUser, handleLogout, setSearch}) {
+function Nav({currentUser, handleLogout, setSearch, setFilter, filter, randomGame}) {
 
-    //console.log(window.location.pathname)
-    const history = useHistory()
-    
+    const location = useLocation()
+    //console.log(location.pathname)
     return (
         <nav className="nav-bar">
             <div className="user-nav-div">
@@ -21,15 +20,33 @@ function Nav({currentUser, handleLogout, setSearch}) {
                             {currentUser.username}
                         </NavLink>
                         <button className="nav-button" onClick={handleLogout}>Logout</button>
-                    </div>}
+                    </div>} 
             </div>
             <div className="game-filter-div">
                 <NavLink exact to="/games" className="nav-button">
                     All Games
                 </NavLink>
-                {false ? null : 
-                <div className="nav-search">
-                    <input type="text" placeholder="search games..." onChange={(e) => setSearch(e.target.value)}/>
+                {location.pathname !== "/games" ? null : 
+                <div className="nav-find-things">
+                    <div className="nav-search">
+                        <input type="text" placeholder="search games..." onChange={(e) => setSearch(e.target.value)}/>
+                    </div>
+                    <div className="nav-filter">
+                        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+                            <option value="all">All</option>
+                            <option value="Action" >Action</option>
+                            <option value="First-Person Shooter" >FPS</option>
+                            <option value="Third-Person Shooter" >Third-Person Shooter</option>
+                            <option value="Adventure" >Adventure</option>
+                            <option value="Fighting" >Fighting</option>
+                            <option value="Platform" >Platform</option>
+                            <option value="Horror" >Horror</option>
+                            <option value="Sports" >Sports</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button className="nav-rdm-game" onClick={randomGame}>I'm Feeling Lucky</button>
+                    </div>
                 </div>
                 }
             </div>
