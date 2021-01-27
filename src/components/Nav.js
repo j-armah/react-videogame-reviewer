@@ -15,16 +15,21 @@ function Nav({currentUser, handleLogout, setSearch, setFilter, filter, randomGam
                         </NavLink>
                     </div> 
                     :
-                    <div>
-                        <NavLink exact to={`/users/${currentUser.id}`} className="nav-button">
-                            {currentUser.username}
-                        </NavLink>
-                        <button className="nav-button" onClick={handleLogout}>Logout</button>
+                    <div className="logged-in">
+                        <div className="hey">
+                            Hey!   
+                        </div>
+                        <div>
+                            <NavLink exact to={`/users/${currentUser.id}`} className="nav-button">
+                                {currentUser.username}
+                            </NavLink>
+                            <button className="nav-button" onClick={handleLogout}>Logout</button>
+                        </div>
                     </div>} 
             </div>
             <div className="game-filter-div">
                 <NavLink exact to="/games" className="nav-button">
-                    All Games
+                    Home
                 </NavLink>
                 {location.pathname !== "/games" ? null : 
                 <div className="nav-find-things">

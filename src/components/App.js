@@ -17,21 +17,24 @@ function App() {
   const [filter, setFilter] = useState("all")
   const history = useHistory()
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     fetch(`${process.env.REACT_APP_API_BASE_URL}/profile`, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //       .then((r) => r.json())
-  //       .then((user) => {
-  //         setCurrentUser(user);
-  //       });
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/profile`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((r) => r.json())
+        .then((user) => {
+          console.log(user)
+          setCurrentUser(user);
+        });
+    }
+  }, []);
+
+  //console.log(currentUser)
 
   const handleLogin = (user) => {
     console.log(user)

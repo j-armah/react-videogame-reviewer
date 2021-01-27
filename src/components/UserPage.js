@@ -55,9 +55,12 @@ function UserPage({userGames, handleFavorite, setUserGames, currentUser}) {
     if (!isLoaded) return <h2>Loading...</h2>;
     return (
         <div>
-            <h1> {user.username} </h1>
+            
             {/* Shows username and user info, shows a list of games they've played, a list of their favorite games, and a list of their reviews */}
             <div className="user-page-info">
+            {/* <div className="user-head-container"> */}
+                <div className="user-head">{user.username} </div>
+            {/* </div> */}
                 <div className="game-list">
                     <h3>Game List</h3> 
                     {/* Can sort by favorites */}
@@ -93,6 +96,7 @@ function UserPage({userGames, handleFavorite, setUserGames, currentUser}) {
                                 <div className="user-review-head ">
                                     <div className="user-rating-circle">{review.rating}</div>
                                     <div className="user-game-title">{review.game.title}</div>
+                                    
                                 </div>
                                 <div className="user-review-content">{review.content}</div>
                             </div>)
