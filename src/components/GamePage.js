@@ -262,11 +262,6 @@ function GamePage({ addGame, currentUser}) {
                         </div> : null}
                 </div>
             </div>
-            {/* 
-            Video and game description here, or just game description for now on One side
-            Reviews on right, if Logged in there should be some way to write a review here if you've added this game to your played game list
-            Would have to fetch usergames and determine whether user has played game? If yes they can write a review, which would Post a new review obj
-            */}
         </div>
     )
 }

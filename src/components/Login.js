@@ -4,24 +4,11 @@ import { NavLink, useHistory } from 'react-router-dom'
 function Login({ handleLogin }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [errors, setErrors] = useState("")
     const history = useHistory()
-
-    // function login() {
-    //     fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
-    //       method: "POST",
-    //       headers: {
-    //           "Content-Type": "application/json"
-    //       }
-    //     })
-    //     .then((r) => r.json())
-    //     .then(data => {
-    //         setCurrentUser(data)
-    //     });
-    // }
 
     function handleSubmit(e) {
         e.preventDefault();
-        // TODO: make a fetch request to login the current user
         const formData = { username, password };
         //console.log(formData)
     
@@ -40,21 +27,12 @@ function Login({ handleLogin }) {
               handleLogin(data.user)
               localStorage.setItem("token", data.token)
             } else {
-              alert('Incorret username or password')
+              console.log(data)
+              setErrors(data.error)
+              // alert('Incorret username or password')
             }
           });
-    
-        // and redirect to the home page
       }
-
-    // function handleSubmit(e) {
-    //     e.preventDefault()
-
-    //     const formData = { username, password }
-
-    //     console.log(formData)
-    // }
-
 
     return (
         <div className="login">
@@ -79,11 +57,10 @@ function Login({ handleLogin }) {
                     />
                     <input type="submit" value="Login" />
                 </form>
+                <div className="errors">{errors}</div>
                 <button> <NavLink exact to="/signup">Sign Up</NavLink></button>
                 <button onClick={() => history.push("/games")}> Continue as Guest</button>
             </div>
-            
-            {/* Login Form here, button hit to switch to sign up form... Probably use fake auth for now */}
         </div>
     )
 }

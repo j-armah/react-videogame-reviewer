@@ -45,7 +45,6 @@ code {
   font-family: headerFont;
   font-size: 30px;
   height: 100%;
-  
 }
 
 
@@ -74,15 +73,19 @@ header {
   max-height: 100%;
   max-width: 100%;
   align-items: center;
-
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 nav {
   color: white;
   grid-area: nav;
-  /* background-color: rgba(0,0,0,0.7); */
+  background-color: rgba(48, 47, 61, 0.7);
+  height: 100%;
+  padding: 6px 20px;
+  margin-top:-10px;
   /* box-shadow: 0px 10px 43px 22px rgba(0,0,0,0.75); */
-  border: 2px solid green; 
+  /* border: 2px solid green;  */
   /* text-align: center; */
   /* position: relative; */
   /* display: inline-block */
@@ -93,32 +96,69 @@ nav {
   /* max-height: 70vh;
   max-width: 100%; */
   height: 400px;
-  width: 300px;
+  width: 100%;
   margin: 0px auto;
   /* box-shadow: 0px 10px 36px 2px rgba(110,110,110,1); */
-  animation-name: load-movie;
+  /* animation-name: load-movie;
   animation-duration: 1s;
-  transition: transform 1s, box-shadow 0.5s;
+  transition: transform 1s, box-shadow 0.5s; */
   
 }
 
-.poster:hover {
+.card:hover {
   transform: scale(1.1); 
   box-shadow: 0px 10px 36px 2px rgb(15, 3, 58);
 }
 
-.poster:active {
+.card:active {
   transform: scale(0.8);
   box-shadow: 0px 10px 36px 2px rgb(22, 6, 59);
 }
 
 .card {
+  display: grid;
+  grid-template-rows: max-content 75px 1fr;
+  animation-name: load-movie;
+  animation-duration: 1s;
+  transition: transform 1s, box-shadow 0.5s;
+  background-color: rgba(48, 47, 61, 0.7)
+}
+
+.card-content {
+  /* display: flex; */
+  position: relative
+}
+.card-title{
+  /* width: 10%; */
   text-align: center;
+  font-size: 20px;
+}
+.card-rating {
+  float: right;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+}
+
+/* .card-inner {
+  margin: 0 auto;
+  margin-top: -6px;
+  padding: 2px 14px;
+  background-color: rgba(21, 21, 65, 0.986);
+  width: 300px;
+} */
+
+.errors {
+  color: red;
+  font-size: 20px;
 }
 
 
 /* -------------------- GAME PAGE CSS -------------------- */
-
+.gamepage-div {
+  padding-left: 10%;
+  padding-right: 10%;
+}
 .game-page-info {
   display: grid;
   grid-template-areas: 
@@ -235,6 +275,8 @@ nav {
   /* grid-template-columns: 1fr; */
   row-gap: 10px;
   column-gap: 15px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .game-list {

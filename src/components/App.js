@@ -17,6 +17,7 @@ function App() {
   const [filter, setFilter] = useState("all")
   const history = useHistory()
 
+  // Auth to keep user logged in after refresh
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -35,7 +36,7 @@ function App() {
   }, []);
 
   //console.log(currentUser)
-
+  // Handle login and logout
   const handleLogin = (user) => {
     console.log(user)
     setCurrentUser(user)
@@ -44,6 +45,7 @@ function App() {
 
   const handleLogout = () => {
     setCurrentUser(null)
+    localStorage.removeItem("token")
     history.push("/")
   }
 
@@ -98,6 +100,7 @@ function App() {
       })
   }, []);
 
+  // random game function
   const randomGame = () => {
     let game = games[Math.floor(Math.random() * games.length)]
     history.push(`/games/${game.id}`)
@@ -109,15 +112,8 @@ function App() {
   if (filter !== "all") {
     filteredGames = filteredGames.filter(game => game.genre === filter)
   }
-  
 
-  console.log(currentUser)
-  // if (!currentUser) {
-  //   return (
-
-  //   )
-  // } else {
-    return (
+  return (
     <div className="root">
         <Route>
             <header>LOGO HEADER</header>
@@ -136,14 +132,14 @@ function App() {
           <Route exact path="/users/:id">
             <UserPage currentUser={currentUser} setUserGames={setUserGames} userGames={userGames} handleFavorite={handleFavorite}/>
           </Route>
-          {/* <Route path="*">
-            <Redirect to="/games" />
-          </Route> */}
           <Route exact path='/'>
             <Login handleLogin={handleLogin} />
           </Route>
           <Route exact path='/signup'>
             <SignUp handleLogin={handleLogin} />
+          </Route>
+          <Route path="*">
+            <Redirect to="/games" />
           </Route>
       </Switch>
     </div>

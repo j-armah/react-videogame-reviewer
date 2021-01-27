@@ -21,8 +21,6 @@ function UserPage({userGames, handleFavorite, setUserGames, currentUser}) {
     }, [params.id]);
 
     const toggleFavorite = (userGameObj) => {
-        console.log(!userGameObj.favorite)
-        //setIsFavorited(isFavorited => !isFavorited)
         fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games/${userGameObj.id}`, {
             method: "PATCH",
             headers: {
@@ -54,8 +52,7 @@ function UserPage({userGames, handleFavorite, setUserGames, currentUser}) {
     //console.log(filteredUserGames)
     if (!isLoaded) return <h2>Loading...</h2>;
     return (
-        <div>
-            
+        <div>   
             {/* Shows username and user info, shows a list of games they've played, a list of their favorite games, and a list of their reviews */}
             <div className="user-page-info">
             {/* <div className="user-head-container"> */}
