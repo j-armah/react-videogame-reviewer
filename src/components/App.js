@@ -1,12 +1,14 @@
 
 import React, {useState, useEffect} from 'react';
-import { Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import GameList from './GameList';
 import GamePage from './GamePage'
 import Login from './Login'
 import UserPage from './UserPage'
 import Nav from './Nav'
 import SignUp from './SignUp'
+import Snake from 'react-simple-snake'
+import Modal from 'react-modal'
 
 function App() {
   const [games, setGames] = useState([])
@@ -15,8 +17,36 @@ function App() {
   const [userGames, setUserGames] = useState([])
   const [search, setSearch] = useState("")
   const [filter, setFilter] = useState("all")
+  const [modalIsOpen, setIsOpen] = React.useState(false)
+  const [gameAvg, setGameAvg] = useState(0)
   const history = useHistory()
+  const location = useLocation()
+  console.log(location.pathname)
 
+  const customStyles = {
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : '50%',
+      bottom                : 'auto',
+      marginRight           : '50%',
+      transform             : 'translate(-50%, -50%)',
+      height: "200px",
+      width: "500px",
+      background: "black",
+      padding: "50px",
+    }
+}
+
+  function openModal() {
+        setIsOpen(true);
+    }
+  function afterOpenModal() {
+      
+    }
+  function closeModal() {
+      setIsOpen(false);
+    }
   // Auth to keep user logged in after refresh
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -90,7 +120,7 @@ function App() {
       .then(data => {
         setGames(data)
       })
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games`)
@@ -112,11 +142,26 @@ function App() {
   if (filter !== "all") {
     filteredGames = filteredGames.filter(game => game.genre === filter)
   }
-
+  console.log(gameAvg)
   return (
     <div className="root">
         <Route>
-            <header>LOGO HEADER</header>
+            <header>
+              <div className="banner">
+                    <Modal 
+                    isOpen={modalIsOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                  >
+                        <Snake/>
+                    </Modal>
+                <div className="logo">
+                  <img src="https://i.ibb.co/SfFXqNJ/logo2.png" alt="logo" onClick={openModal}/>
+                </div>
+              </div>
+            </header>
             {/* Navbar prob need its own component? for search and filter, but only when on /games */}
             <Nav randomGame={randomGame} filter={filter} setFilter={setFilter} setSearch={setSearch} currentUser={currentUser} handleLogout={handleLogout}/>
         </Route>
@@ -127,7 +172,7 @@ function App() {
             </main>
           </Route>
           <Route exact path="/games/:id">
-            <GamePage currentUser={currentUser} addGame={handleAddGame}/>
+            <GamePage setGameAvg={setGameAvg} currentUser={currentUser} addGame={handleAddGame}/>
           </Route>
           <Route exact path="/users/:id">
             <UserPage currentUser={currentUser} setUserGames={setUserGames} userGames={userGames} handleFavorite={handleFavorite}/>

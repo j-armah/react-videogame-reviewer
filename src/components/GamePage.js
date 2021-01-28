@@ -1,33 +1,22 @@
 import React, {useState, useEffect} from 'react'
 import { NavLink, useParams } from 'react-router-dom';
-// import Modal from 'react-modal'
-// Modal.setAppElement('#root');
+import ReactPlayer from "react-player"
+import EditReview from './EditReview'
 
-
-
-function GamePage({ addGame, currentUser}) {
+function GamePage({ addGame, currentUser, setGameAvg}) {
     const [game, setGame] = useState(null)
     const [isLoaded, setIsLoaded] = useState(false)
     const [content, setContent] = useState("")
-    const [rating, setRating] = useState(0)
+    const [rating, setRating] = useState(1)
     const [reviews, setReviews] = useState([])
-    // const [modalIsOpen, setIsOpen] = React.useState(false)
-    // var subtitle;
-
+    const [average, setAverage] = useState(0)
+    const [isEditing, setIsEditing] = useState(false)
+  
 
     const params = useParams()
+    
     //console.log(params.id)
 
-    const customStyles = {
-        content : {
-          top                   : '50%',
-          left                  : '50%',
-          right                 : 'auto',
-          bottom                : 'auto',
-          marginRight           : '-50%',
-          transform             : 'translate(-20%, -50%)',
-        }
-    }
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/`)
@@ -36,7 +25,7 @@ function GamePage({ addGame, currentUser}) {
             
             const gameReviews = reviews.filter(review => review.game_id === parseInt(params.id))
             //console.log(gameReviews)
-            setReviews(gameReviews);
+            setReviews(gameReviews.reverse());
           });
     }, [params.id])
 
@@ -47,22 +36,22 @@ function GamePage({ addGame, currentUser}) {
               //console.log(game)
             setGame(game);
             setIsLoaded(true);
+            let sumRating = game.reviews.map(review => review.rating).reduce((a, b) => a + b, 0)
+            let averageRating = sumRating / game.reviews.length
+            isNaN(averageRating) ? setAverage(0) : setAverage(averageRating.toFixed(1))
           });
     }, [params.id]);
 
     
-    // function openModal() {
-    //     setIsOpen(true);
-    // }
-    // function afterOpenModal() {
-    //     subtitle.style.color = 'white';
-    // }
-    // function closeModal() {
-    //     setIsOpen(false);
-    // }
     function handleAddReview(newReview) {
-        const newReviews = [...reviews, newReview]
+        const newReviews = [newReview, ...reviews]
         setReviews(newReviews)
+        
+        // let sumRating = newReviews.reviews.map(review => review.rating).reduce((a, b) => a + b, 0)
+        // let averageRating = sumRating / newReviews.reviews.length
+        // // isNaN(averageRating) ? setAverage(0) : setAverage(averageRating)
+        // // setAverage(averageRating)
+        // console.log(reviews)
     }
 
     function handleSubmit(event) {
@@ -85,149 +74,111 @@ function GamePage({ addGame, currentUser}) {
         .then(newReview => {
             if (newReview.id !== null) {
                 handleAddReview(newReview)
+                
+                // setAverage(newAvg)
             } else {
                 alert("Already reviewed game!")
             } 
         })
     }
 
-    function handleDeleteReview(key) {
+    function handleDeleteReview(reviewObj) {
         //console.log(key)
-        fetch(`http://localhost:4000/reviews/${key}`, {
+        fetch(`http://localhost:4000/reviews/${reviewObj.id}`, {
             method: 'DELETE'
         })
         .then(response => response.json())
         .then(data => {
-            const newReviews = reviews.filter(review => review.id !== key)
+            const newReviews = reviews.filter(review => review.id !== reviewObj.id)
             setReviews(newReviews)
+            // let newSum = newReviews.reviews.map(review => review.rating).reduce((a, b) => a + b, 0)
+            //let newAvg = newSum - reviewObj.rating
+            
+            //setAverage(newAvg)
+            // console.log(newSum)
         })
     }
 
-    function handleEditReview(event) {
-        event.preventDefault()
 
-        console.log(event)
-    }
 
-    // function addEditForm(reviewObj) {
-    //     return (
-    //         <div>
-    //             <form onSubmit={handleEditReview}>
-    //                     <label>
-    //                         Edit Review:<br/>
-    //                         <textarea name="content" value={reviewObj.content} onChange ={event => setContent(event.target.value)}/>
-    //                         <br/>
-    //                         Rating: <select name="rating" id="rating" form="review" value={reviewObj.rating} onChange={event => setRating(event.target.value)}>
-    //                             <option value="1">1</option>
-    //                             <option value="2">2</option>
-    //                             <option value="3">3</option>
-    //                             <option value="4">4</option>
-    //                             <option value="5">5</option>
-    //                             <option value="6">6</option>
-    //                             <option value="7">7</option>
-    //                             <option value="8">8</option>
-    //                             <option value="9">9</option>
-    //                             <option value="10">10</option>
-    //                         </select>
-    //                     </label>
-    //                     <button type="submit">Submit Review</button>
-    //                 </form>
-    //         </div>
-    //     );
-    // }
+    // console.log(average)
 
-    function editForm (review) {
-        console.log(review)
-    }
+    useEffect(() => {
+        let newSum = reviews.map(review => review.rating).reduce((a, b) => a + b, 0)
+        let newAvg = newSum / reviews.length
+        //console.log(newAvg)
+        {isNaN(newAvg) ? setAverage(0) : setAverage(newAvg.toFixed(1))} 
+        {isNaN(newAvg) ? setGameAvg(0) : setGameAvg(newAvg.toFixed(1))}
+    }, [reviews])
 
-    function handleEditReview(key) {
-        fetch(`http://localhost:4000/reviews/${key}`, {
-            method: 'PATCH',
-            header: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            },
-            body: JSON.stringify({
-                content: content,
-                rating: rating
-            })
-        })
-        .then(response => response.json())
 
-    }
-    //console.log(game)
     if (!isLoaded) return <h2>Loading...</h2>;
     
     return (
         <div className="gamepage-div">
-            <div></div>
-            <h1>{game.title}</h1>
+            {/* <h1>{game.title}</h1> */}
             <div className="game-page-info">
                 <div className="video">
-                    Video/Poster
-                    
+                    <ReactPlayer
+                        width={1100}
+                        height={460}
+                        controls={true}
+                        volume={0.2}
+                        playing={true}
+                        muted={true}
+                        url={game.video}
+                    />
+                </div>
+                <div className="game-banner">
+                    <img src={game.banner}/>
                 </div>
                 <div className="game-info">
-                    <h3>{game.title}</h3>
-                    <p>{game.genre}</p>
-                    <p>{game.maturity_rating}</p>
-                    <p>{game.description}</p>
-                    {!currentUser ? null : <button onClick={() => addGame(game)}> Add to Game List</button>}
-                </div>
+                    <div className="score-div">
+                        <div className="game-score">{average} </div>
+                        <div className="score-div-content">
+                            <p style={{fontSize: 20}}>Score </p>
+                            <p>{reviews.length} User reviews</p>
+                        </div>
+                    </div>
+                    <div className="page-review-head">{game.title}</div>
+                        <div className="game-info-div">
+                            <p>{game.description}</p>
+                            <p style={{fontSize: 16}}>{game.genre}</p>
+                            <p style={{fontSize: 16}}>{game.maturity_rating}</p>
+                        </div>
+                        {!currentUser ? null : <button className="submit-button" onClick={() => addGame(game)}> Add to Game List</button>}
+                    </div>
                 
                 <div className="game-review">
                     <div className="page-review-head">Reviews</div>
                     <ul>
                         {reviews.map(review => 
                             <div className="review-info" key={review.id}>
-                                <div className="review-head">
-                                    <div className="rating-circle">{review.rating}</div> 
-                                    <div className="review-username"><NavLink exact to={`/users/${review.user.id}`}>{review.user.username}</NavLink></div>
-                                </div>
-                                <div className="review-content">{review.content}</div>
+                                {isEditing ? null : <div>
+                                    <div className="review-head">
+                                        <div className={review.rating <= 3 ? "rating-circle-red" : review.rating <= 7 ? "rating-circle-yellow" : "rating-circle"}>{review.rating}</div> 
+                                        <div className="review-username"><NavLink exact to={`/users/${review.user.id}`}>{review.user.username}</NavLink></div>
+                                    </div>
+                                    <div className="review-content">{review.content}</div>
+                                </div>}
                                 {!currentUser ? 
-                                null 
+                                null
                                 : currentUser.id === review.user_id
                                 ? 
                                 <div>
-                                    <button className="edit-button" >📝</button>
-                                    
-                                    {/* <Modal
-                                        isOpen={modalIsOpen}
-                                        onAfterOpen={afterOpenModal}
-                                        onRequestClose={closeModal}
-                                        style={customStyles}
-                                        contentLabel="Example Modal"
-                                        className="Modal"
-                                        overlayClassName="Overlay"
-                                        setContent={setContent}
-                                    >
-                                    
-                                        <h2 ref={_subtitle => (subtitle = _subtitle)}>Edit Review</h2>
-                                        <form onSubmit={handleEditReview}>
-                                            <label>
-                                            Edit Review:<br/>
-                                            <textarea name="content" value={review.content} onChange ={event => setContent(event.target.value)}/>
-                                            <br/>
-                                            Rating: <select name="rating" id="rating" form="review" value={review.rating} onChange={event => setRating(event.target.value)}>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                        <option value="6">6</option>
-                                                        <option value="7">7</option>
-                                                        <option value="8">8</option>
-                                                        <option value="9">9</option>
-                                                        <option value="10">10</option>
-                                                    </select>
-                                                    <input type="submit" value="Edit Review"/>
-                                            </label>
-                                            
-                                        </form>
-                                    
-                                    </Modal> */}
-                                    <button className="delete-button" onClick={() => handleDeleteReview(review.id)}>🗑</button>
+                                    {/* onUpdateReview={handleUpdateReview} */}
+                                    {isEditing ? <EditReview 
+                                                    id={review.id} 
+                                                    content={review.content} 
+                                                    rating={review.rating} 
+                                                    reviews={reviews} 
+                                                    setReviews={setReviews}
+                                                    setIsEditing={setIsEditing}
+                                                    isEditing={isEditing}
+                                                />
+                                    :  null}
+                                    <button className="edit-button" onClick={() => setIsEditing(!isEditing)}>📝</button>
+                                    <button className="delete-button" onClick={() => handleDeleteReview(review)}>🗑</button>
                                 </div>
                                 : null}
                             </div>
@@ -235,16 +186,16 @@ function GamePage({ addGame, currentUser}) {
                     </ul>
                     {/* Flip div ? */}
                     {!currentUser ? 
-                        null 
+                        <div style={{textAlign: "center"}}>Sign in to leave a review</div>
                         : !reviews.map(review => review.user_id).includes(currentUser.id)
                         ? 
-                        <div>
+                        <div className="review-form">
                             <form onSubmit={handleSubmit}>
                                 <label>
                                     Write a review:<br/>
                                     <textarea name="content" value={content} onChange ={event => setContent(event.target.value)}/>
                                     <br/>
-                                    Rating: <select name="rating" id="rating" form="review" value={rating} onChange={event => setRating(event.target.value)}>
+                                    Rate: <select name="rating" id="rating" form="review" value={rating} onChange={event => setRating(event.target.value)}>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -255,9 +206,11 @@ function GamePage({ addGame, currentUser}) {
                                         <option value="8">8</option>
                                         <option value="9">9</option>
                                         <option value="10">10</option>
+                                    
                                     </select>
                                 </label>
-                                <button type="submit">Submit Review</button>
+                                <br/>
+                                <button type="submit" className="submit-button">Submit Review</button>
                             </form>
                         </div> : null}
                 </div>

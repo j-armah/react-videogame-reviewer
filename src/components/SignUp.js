@@ -34,9 +34,10 @@ function SignUp({handleLogin}) {
 
   return (
     <div className="login">
+      <audio src='http://soundimage.org/wp-content/uploads/2017/05/Nighttime-Escape.mp3' type='audio/mpeg' controls autoplay loop>Chill Music</audio>
       <div className="login-form-box">
         <form className="login-form" onSubmit={handleSubmit}>
-          <h3>Welcome to GameRx</h3>
+          <h3>Welcome to GamesRx!</h3>
 
           <label htmlFor="username">Username</label>
           <input
@@ -56,11 +57,11 @@ function SignUp({handleLogin}) {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <input type="submit" value="Signup" />
+          <button type="submit" className='submit-button'>Sign Up</button>
         </form>
         <div className="errors">{errors}</div>
-        <button> <NavLink exact to="/">Login</NavLink></button>
-        <button onClick={() => history.push("/games")}> Continue as Guest</button>
+        <button className='submit-button'> <NavLink exact to="/" className='submit-button'>Login</NavLink></button>
+        <button className='submit-button' onClick={() => history.push("/games")}> Continue as Guest</button>
       </div>
     </div>
   );

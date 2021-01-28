@@ -56,7 +56,11 @@ function UserPage({userGames, handleFavorite, setUserGames, currentUser}) {
             {/* Shows username and user info, shows a list of games they've played, a list of their favorite games, and a list of their reviews */}
             <div className="user-page-info">
             {/* <div className="user-head-container"> */}
-                <div className="user-head">{user.username} </div>
+                <div className="user-head">
+                    <div className="username">
+                        {user.username} 
+                    </div>
+                </div>
             {/* </div> */}
                 <div className="game-list">
                     <h3>Game List</h3> 
@@ -91,7 +95,9 @@ function UserPage({userGames, handleFavorite, setUserGames, currentUser}) {
                         {user.reviews.map(review => 
                             <div key={review.id} className="user-review">
                                 <div className="user-review-head ">
-                                    <div className="user-rating-circle">{review.rating}</div>
+                                    <div className={review.rating <= 3 ? "rating-circle-red" : review.rating <= 7 ? "rating-circle-yellow" : "rating-circle"}>
+                                        {review.rating}
+                                    </div>
                                     <div className="user-game-title">{review.game.title}</div>
                                     
                                 </div>

@@ -16,12 +16,9 @@ function Nav({currentUser, handleLogout, setSearch, setFilter, filter, randomGam
                     </div> 
                     :
                     <div className="logged-in">
-                        <div className="hey">
-                            Hey!   
-                        </div>
-                        <div>
+                        <div className='welcome-div'>
                             <NavLink exact to={`/users/${currentUser.id}`} className="nav-button">
-                                {currentUser.username}
+                                Welcome, {currentUser.username}!
                             </NavLink>
                             <button className="nav-button" onClick={handleLogout}>Logout</button>
                         </div>
@@ -29,7 +26,7 @@ function Nav({currentUser, handleLogout, setSearch, setFilter, filter, randomGam
             </div>
             <div className="game-filter-div">
                 <NavLink exact to="/games" className="nav-button">
-                    Home
+                    <img className="mini-logo" src="https://i.ibb.co/WzQrzxK/Logo-Makr-5k6-Cv7.png" alt="Logo2"/>
                 </NavLink>
                 {location.pathname !== "/games" ? null : 
                 <div className="nav-find-things">
@@ -50,7 +47,7 @@ function Nav({currentUser, handleLogout, setSearch, setFilter, filter, randomGam
                         </select>
                     </div>
                     <div>
-                        <button className="nav-rdm-game" onClick={randomGame}>I'm Feeling Lucky</button>
+                        <button className="nav-button" onClick={randomGame}>New Game, Who Dis?</button>
                     </div>
                 </div>
                 }
