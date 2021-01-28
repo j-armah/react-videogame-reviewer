@@ -57,7 +57,7 @@ function GamePage({ addGame, currentUser, setGameAvg}) {
     function handleSubmit(event) {
         event.preventDefault()
         //console.log(content, rating)
-        fetch("http://localhost:4000/reviews", {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -84,7 +84,7 @@ function GamePage({ addGame, currentUser, setGameAvg}) {
 
     function handleDeleteReview(reviewObj) {
         //console.log(key)
-        fetch(`http://localhost:4000/reviews/${reviewObj.id}`, {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews/${reviewObj.id}`, {
             method: 'DELETE'
         })
         .then(response => response.json())
