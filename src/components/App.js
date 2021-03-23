@@ -21,7 +21,7 @@ function App() {
   const [gameAvg, setGameAvg] = useState(0)
   const history = useHistory()
   const location = useLocation()
-  console.log(location.pathname)
+  // console.log(location.pathname)
 
   const customStyles = {
     content : {
@@ -59,7 +59,7 @@ function App() {
       })
         .then((r) => r.json())
         .then((user) => {
-          console.log(user)
+          // console.log(user)
           setCurrentUser(user);
         });
     }
@@ -68,7 +68,7 @@ function App() {
   //console.log(currentUser)
   // Handle login and logout
   const handleLogin = (user) => {
-    console.log(user)
+    // console.log(user)
     setCurrentUser(user)
     history.push("/games")
   }
@@ -142,7 +142,7 @@ function App() {
   if (filter !== "all") {
     filteredGames = filteredGames.filter(game => game.genre === filter)
   }
-  console.log(gameAvg)
+  // console.log(gameAvg)
   return (
     <div className="root">
         <Route>

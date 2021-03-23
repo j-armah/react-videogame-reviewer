@@ -5,7 +5,7 @@ function GameCard({game}) {
     const {id, title, genre, maturity_rating, description, image} = game
     let sumRating = game.reviews.map(review => review.rating).reduce((a, b) => a + b, 0)
     let averageRating = (sumRating / game.reviews.length).toFixed(1)
-    console.log(averageRating === NaN)
+    // console.log(averageRating === NaN)
 
     return (
         <div className="card">
